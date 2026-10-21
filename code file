@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Jenkins</title>
+  <style>
+    :root {
+      --indigo: #1e1b4b;
+      --violet: #7c3aed;
+      --pink: #ec4899;
+      --coral: #ff5a5f;
+      --amber: #ffb020;
+      --teal: #14b8a6;
+      --sky: #38bdf8;
+      --ink: #1f2240;
+      --muted: #5d6185;
+      --soft: #f5f3ff;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      color: var(--ink);
+      background: var(--white);
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+    .wrap { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Hero band with navigation */
+    .top {
+      position: relative;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 85% 15%, rgba(236, 72, 153, 0.55), transparent 45%),
+        radial-gradient(circle at 10% 90%, rgba(20, 184, 166, 0.35), transparent 40%),
+        linear-gradient(135deg, #1e1b4b 0%, #4c1d95 60%, #7c3aed 100%);
+    }
+
+    nav { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+    .brand-mark {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--coral), var(--amber));
+      display: grid; place-items: center;
+      font-weight: 800; color: var(--indigo);
+    }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul a { color: rgba(255, 255, 255, 0.8); font-weight: 500; }
+    nav ul a:hover { color: var(--amber); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 56px;
+      align-items: center;
+      padding: 72px 0 104px;
+    }
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+    .lead { font-size: 1.2rem; color: #ddd6fe; max-width: 46ch; margin-bottom: 36px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; }
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: 2px solid transparent;
+    }
+    .btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+    .btn-primary { background: var(--amber); color: var(--indigo); }
+    .btn-primary:hover { background: #ffc24d; }
+    .btn-ghost { border-color: rgba(255, 255, 255, 0.55); color: var(--white); }
+    .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); }
+
+    /* Pipeline panel */
+    .panel {
+      background: var(--white);
+      color: var(--ink);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 30px 60px rgba(10, 8, 40, 0.45);
+    }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .panel-head strong { font-size: 1.1rem; }
+    .badge {
+      background: #dcfce7; color: #15803d;
+      font-size: 0.85rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 999px;
+    }
+    .progress { height: 8px; border-radius: 999px; background: #ece9fe; overflow: hidden; margin-bottom: 22px; }
+    .progress span {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--sky), var(--violet), var(--amber), var(--teal));
+      animation: fill 3.4s ease-out 0.4s forwards;
+    }
+    @keyframes fill { to { width: 100%; } }
+
+    .stages { list-style: none; }
+    .stages li {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 0;
+      border-top: 1px solid #eeeaff;
+      font-weight: 600;
+    }
+    .stages li:first-child { border-top: 0; padding-top: 4px; }
+    .stages li small { margin-left: auto; color: var(--muted); font-weight: 400; font-size: 0.9rem; }
+    .dot {
+      flex: none;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #e7e4f7;
+      display: grid; place-items: center;
+      color: var(--white); font-size: 0.85rem; font-weight: 800;
+      animation: lit 0.4s forwards;
+    }
+    .dot::after { content: "\2713"; opacity: 0; animation: tick 0.4s forwards; }
+    .s1 .dot { --c: var(--sky); }
+    .s2 .dot { --c: var(--violet); }
+    .s3 .dot { --c: var(--amber); }
+    .s4 .dot { --c: var(--teal); }
+    .s1 .dot, .s1 .dot::after { animation-delay: 0.7s; }
+    .s2 .dot, .s2 .dot::after { animation-delay: 1.5s; }
+    .s3 .dot, .s3 .dot::after { animation-delay: 2.3s; }
+    .s4 .dot, .s4 .dot::after { animation-delay: 3.1s; }
+    @keyframes lit { to { background: var(--c); } }
+    @keyframes tick { to { opacity: 1; } }
+
+    /* Features */
+    .features { background: var(--soft); }
+    .features .wrap { padding-top: 88px; padding-bottom: 96px; }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 48px;
+      max-width: 20ch;
+      color: var(--indigo);
+    }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 32px 28px 36px;
+      border-top: 6px solid var(--accent);
+      box-shadow: 0 10px 30px rgba(76, 29, 149, 0.08);
+    }
+    .card:nth-child(1) { --accent: var(--teal); --tint: #ccfbf1; }
+    .card:nth-child(2) { --accent: var(--violet); --tint: #ede9fe; }
+    .card:nth-child(3) { --accent: var(--coral); --tint: #ffe4e4; }
+    .icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--tint);
+      display: grid; place-items: center;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+    h3 { font-size: 1.25rem; margin-bottom: 10px; }
+    .card p { color: var(--muted); }
+
+    /* Call to action */
+    .cta {
+      background: linear-gradient(135deg, var(--coral), var(--pink) 55%, var(--violet));
+      color: var(--white);
+      text-align: center;
+      padding: 80px 24px;
+    }
+    .cta h2 { color: var(--white); margin: 0 auto 16px; max-width: 24ch; }
+    .cta p { color: #ffe4f1; margin-bottom: 32px; font-size: 1.1rem; }
+    .cta .btn-primary { background: var(--white); color: var(--indigo); }
+    .cta .btn-primary:hover { background: #fff3d6; }
+
+    footer { background: var(--indigo); color: #c4bff0; padding: 36px 0; font-size: 0.95rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; padding: 48px 0 72px; gap: 48px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      nav ul { display: none; }
+      .stages li small { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .progress span { animation-duration: 0.01s; animation-delay: 0s; }
+      .dot, .dot::after { animation-duration: 0.01s; animation-delay: 0s !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top" id="top">
+    <div class="wrap">
+      <nav aria-label="Main">
+        <a href="#top" class="brand"><span class="brand-mark">J</span>Jenkins CI/CD</a>
+        <ul>
+          <li><a href="#top">Pipeline</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <section class="hero">
+        <div>
+          <h1>Welcome to Jenkins</h1>
+          <p class="lead">This site was built, tested, and deployed automatically. Push your code and the pipeline does the rest.</p>
+          <div class="actions">
+            <a href="#features" class="btn btn-primary">See how it works</a>
+            <a href="#contact" class="btn btn-ghost">Get in touch</a>
+          </div>
+        </div>
+
+        <div class="panel" aria-label="Example pipeline run">
+          <div class="panel-head">
+            <strong>Build #42</strong>
+            <span class="badge">Passing</span>
+          </div>
+          <div class="progress"><span></span></div>
+          <ol class="stages">
+            <li class="s1"><span class="dot"></span>Commit <small>Code pushed to GitHub</small></li>
+            <li class="s2"><span class="dot"></span>Build <small>Application packaged</small></li>
+            <li class="s3"><span class="dot"></span>Test <small>All checks passed</small></li>
+            <li class="s4"><span class="dot"></span>Deploy <small>Live on EC2</small></li>
+          </ol>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section class="features" id="features">
+    <div class="wrap">
+      <h2>Ship changes without touching the server</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="icon">&#9881;&#65039;</div>
+          <h3>Automated builds</h3>
+          <p>Every push to the repository starts a fresh build, so the code on the server always matches the code in Git.</p>
+        </article>
+        <article class="card">
+          <div class="icon">&#129514;</div>
+          <h3>Continuous testing</h3>
+          <p>Tests run before anything goes live. If a check fails, the deployment stops and the current site stays up.</p>
+        </article>
+        <article class="card">
+          <div class="icon">&#128640;</div>
+          <h3>Hands-free deployment</h3>
+          <p>Jenkins copies the finished files to the app server for you. No manual uploads and no logging in over SSH.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <h2>Ready to automate your next release?</h2>
+    <p>Commit a change and watch it go live.</p>
+    <a href="mailto:hello@example.com" class="btn btn-primary">Contact us</a>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span>Deployed with Jenkins on AWS EC2.</span>
+      <span>hello@example.com</span>
+    </div>
+  </footer>
+
+</body>
+</html>
